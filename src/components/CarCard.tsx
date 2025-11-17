@@ -7,9 +7,13 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
+  const isAdminAdded = car.source === 'admin';
+  
   return (
     <div 
-      className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow car-card"
+      className={`bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all car-card ${
+        isAdminAdded ? 'ring-2 ring-red-500 shadow-red-200' : ''
+      }`}
       onClick={onClick}
     >
       <div className="relative h-48">
@@ -18,6 +22,11 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
           alt={`${car.brand} ${car.model}`}
           className="w-full h-full object-cover"
         />
+        {isAdminAdded && (
+          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat">
+            ADMIN
+          </div>
+        )}
       </div>
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-800 mb-2">

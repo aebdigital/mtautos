@@ -16,4 +16,5 @@ export interface Car {
   drivetrain?: string;
   vin?: string;
   description?: string;
+  source?: 'xml' | 'admin'; // Track if car is from XML feed or admin-added
 }
