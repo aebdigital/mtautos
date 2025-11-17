@@ -75,7 +75,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
   ].filter(item => item.value && item.value !== 'N/A');
 
   const nextImage = () => {
-    if (currentImageIndex < images.length - 5) {
+    if (currentImageIndex < images.length - 1) {
       setCurrentImageIndex(prev => prev + 1);
     }
   };
@@ -101,7 +101,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
   return (
     <div className="min-h-screen bg-white">
-      <MiniHero title={`${car.brand} ${car.model}`} />
+      <MiniHero title="DETAIL VOZIDLA" />
       
       <div className="w-4/5 mx-auto py-8">
         {/* Image Gallery */}
@@ -111,39 +111,72 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
               <button 
                 onClick={prevImage}
                 disabled={currentImageIndex === 0}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white border-none text-2xl cursor-pointer px-3 py-1 rounded z-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white border-none text-2xl cursor-pointer px-3 py-1 rounded z-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
               >
                 ←
               </button>
               <button 
                 onClick={nextImage}
-                disabled={currentImageIndex >= images.length - 5}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white border-none text-2xl cursor-pointer px-3 py-1 rounded z-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={currentImageIndex >= images.length - 1}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white border-none text-2xl cursor-pointer px-3 py-1 rounded z-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
               >
                 →
               </button>
             </>
           )}
           
-          <div className="grid grid-cols-5 grid-rows-2 gap-3 h-96">
-            <div className="col-span-2 row-span-2">
-              <img 
-                src={images[currentImageIndex]} 
-                alt={`${car.brand} ${car.model}`}
-                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90"
-                onClick={() => openLightbox(currentImageIndex)}
-              />
+          {/* Sliding Gallery */}
+          <div className="h-96 relative overflow-hidden rounded-lg">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out h-full"
+              style={{ 
+                transform: `translateX(-${currentImageIndex * 100}%)`,
+                width: `${images.length * 100}%`
+              }}
+            >
+              {images.map((image, index) => (
+                <div 
+                  key={index}
+                  className="w-full h-full flex-shrink-0 cursor-pointer"
+                  onClick={() => openLightbox(index)}
+                >
+                  <img 
+                    src={image} 
+                    alt={`${car.brand} ${car.model} ${index + 1}`}
+                    className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                  />
+                </div>
+              ))}
             </div>
-            {images.slice(currentImageIndex + 1, currentImageIndex + 5).map((image, index) => (
-              <img 
-                key={index}
-                src={image} 
-                alt={`${car.brand} ${car.model} ${index + 1}`}
-                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-80"
-                onClick={() => openLightbox(currentImageIndex + index + 1)}
-              />
-            ))}
+            
+            {/* Image Counter */}
+            <div className="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-lg text-sm">
+              {currentImageIndex + 1} / {images.length}
+            </div>
           </div>
+          
+          {/* Thumbnail Navigation */}
+          {images.length > 1 && (
+            <div className="flex justify-center mt-4 space-x-2 overflow-x-auto pb-2">
+              {images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    currentImageIndex === index 
+                      ? 'border-blue-500 opacity-100' 
+                      : 'border-gray-300 opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <img 
+                    src={image} 
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Lightbox */}
