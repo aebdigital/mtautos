@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MiniHero from '../components/MiniHero';
 import PrivacyModal from '../components/PrivacyModal';
 
 const KontaktPage: React.FC = () => {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [vacationPhones, setVacationPhones] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem('mt-autos-vacation-phones');
+      setVacationPhones(stored ? JSON.parse(stored) : []);
+    } catch {
+      setVacationPhones([]);
+    }
+  }, []);
+
+  const phoneNumbers = [
+    { number: '+421 915 511 111', display: '+421 915 511 111' },
+    { number: '+421 915 834 574', display: '+421 915 834 574' }
+  ];
+
+  const activePhones = phoneNumbers.filter(phone => !vacationPhones.includes(phone.number));
 
   return (
     <div className="min-h-screen bg-white">
@@ -24,12 +41,20 @@ const KontaktPage: React.FC = () => {
               </div>
               
               <div>
-                <p className="text-gray-700">
-                  <span className="font-semibold">Tel:</span> +421 915 511 111
-                </p>
-                <p className="text-gray-700 ml-8">
-                  +421 915 834 574
-                </p>
+                {activePhones.length > 0 ? (
+                  <>
+                    {activePhones.map((phone, index) => (
+                      <p key={phone.number} className={`text-gray-700 ${index === 0 ? '' : 'ml-8'}`}>
+                        {index === 0 && <span className="font-semibold">Tel: </span>}
+                        {phone.display}
+                      </p>
+                    ))}
+                  </>
+                ) : (
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Tel:</span> Momentálne nedostupné
+                  </p>
+                )}
               </div>
               
               <div className="flex items-center space-x-4">

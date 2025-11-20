@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Car } from '../types/car';
+import { equipmentCategories } from '../data/equipmentOptions';
 
 interface CarModalProps {
   isOpen: boolean;
@@ -21,12 +22,29 @@ const CarModal: React.FC<CarModalProps> = ({ isOpen, onClose, onSubmit }) => {
     power: '',
     bodyType: '',
     vin: '',
-    description: ''
+    description: '',
+    reservedUntil: '',
+    showOnHomepage: false
   });
+
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+
+  const toggleFeature = (feature: string) => {
+    setSelectedFeatures(prev =>
+      prev.includes(feature)
+        ? prev.filter(f => f !== feature)
+        : [...prev, feature]
+    );
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      features: selectedFeatures.length > 0 ? selectedFeatures : undefined,
+      reservedUntil: formData.reservedUntil || undefined
+    });
     setFormData({
       brand: '',
       model: '',
@@ -40,8 +58,11 @@ const CarModal: React.FC<CarModalProps> = ({ isOpen, onClose, onSubmit }) => {
       power: '',
       bodyType: '',
       vin: '',
-      description: ''
+      description: '',
+      reservedUntil: '',
+      showOnHomepage: false
     });
+    setSelectedFeatures([]);
     onClose();
   };
 
@@ -203,6 +224,83 @@ const CarModal: React.FC<CarModalProps> = ({ isOpen, onClose, onSubmit }) => {
                 placeholder="Doplňujúce informácie o vozidle..."
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Rezervované do</label>
+              <input
+                type="date"
+                value={formData.reservedUntil}
+                onChange={(e) => setFormData({...formData, reservedUntil: e.target.value})}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              />
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="showOnHomepage"
+                checked={formData.showOnHomepage}
+                onChange={(e) => setFormData({...formData, showOnHomepage: e.target.checked})}
+                className="w-4 h-4 text-blue-600 rounded"
+              />
+              <label htmlFor="showOnHomepage" className="ml-2 text-sm font-medium">
+                Zobraziť na domovskej stránke (Najnovšie vozidlá)
+              </label>
+            </div>
+          </div>
+
+          {/* Equipment Selection */}
+          <div className="border-t pt-4 mt-4">
+            <h3 className="text-lg font-semibold mb-3">Výbava</h3>
+            <div className="space-y-2">
+              {equipmentCategories.map((category) => (
+                <div key={category.name} className="border rounded">
+                  <button
+                    type="button"
+                    onClick={() => setExpandedCategory(expandedCategory === category.name ? null : category.name)}
+                    className="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 font-medium flex justify-between items-center"
+                  >
+                    <span>{category.name}</span>
+                    <span>{expandedCategory === category.name ? '−' : '+'}</span>
+                  </button>
+                  {expandedCategory === category.name && (
+                    <div className="p-4 grid grid-cols-2 md:grid-cols-3 gap-2 max-h-60 overflow-y-auto">
+                      {category.options.map((option) => (
+                        <label key={option} className="flex items-center space-x-2 text-sm">
+                          <input
+                            type="checkbox"
+                            checked={selectedFeatures.includes(option)}
+                            onChange={() => toggleFeature(option)}
+                            className="rounded text-blue-600"
+                          />
+                          <span>{option}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            {selectedFeatures.length > 0 && (
+              <div className="mt-3 p-3 bg-blue-50 rounded">
+                <p className="text-sm font-medium mb-2">Vybraných: {selectedFeatures.length}</p>
+                <div className="flex flex-wrap gap-1">
+                  {selectedFeatures.map((feature) => (
+                    <span
+                      key={feature}
+                      className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded"
+                    >
+                      {feature}
+                      <button
+                        type="button"
+                        onClick={() => toggleFeature(feature)}
+                        className="ml-1 hover:text-blue-600"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end space-x-4 pt-6">

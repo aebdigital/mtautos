@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CarModal from './components/CarModal';
@@ -13,11 +13,24 @@ import { initialCars } from './data/initialCars';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { fetchAutokazarData } from './services/autokazarApi';
 
-function App() {
+function AppContent() {
+  const navigate = useNavigate();
   const [manualCars, setManualCars] = useLocalStorage<Car[]>('mt-autos-manual-cars', []);
   const [xmlCars, setXmlCars] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Load announcements from localStorage
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem('mt-autos-announcements');
+      setAnnouncements(stored ? JSON.parse(stored) : []);
+    } catch {
+      setAnnouncements([]);
+    }
+  }, []);
 
   // Combine XML cars with manual cars
   const cars = [...xmlCars, ...manualCars];
@@ -78,54 +91,61 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-100">
-        <Header />
-        
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <HomePage 
-                cars={cars}
-                isLoading={isLoading}
-                onCarClick={handleCarClick}
-                onAddCarClick={() => window.location.href = '/admin'}
-              />
-            } 
-          />
-          <Route 
-            path="/ponuka" 
-            element={
-              <PonukaPage 
-                cars={cars}
-                isLoading={isLoading}
-                onAddCarClick={() => window.location.href = '/admin'}
-              />
-            } 
-          />
-          <Route 
-            path="/vozidlo/:slug" 
-            element={<CarDetailPage cars={cars} />} 
-          />
-          <Route 
-            path="/kontakt" 
-            element={<KontaktPage />} 
-          />
-          <Route 
-            path="/admin" 
-            element={<AdminPage onAddCar={handleAddAdminCar} onDeleteCar={handleDeleteAdminCar} onEditCar={handleEditAdminCar} adminCars={manualCars} />} 
-          />
-        </Routes>
+    <div className="min-h-screen bg-gray-100">
+      <Header />
 
-        <Footer />
-
-        <CarModal 
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={handleAddCar}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <HomePage
+              cars={cars}
+              isLoading={isLoading}
+              onCarClick={handleCarClick}
+              onAddCarClick={() => navigate('/admin')}
+              announcements={announcements}
+            />
+          }
         />
-      </div>
+        <Route
+          path="/ponuka"
+          element={
+            <PonukaPage
+              cars={cars}
+              isLoading={isLoading}
+              onAddCarClick={() => navigate('/admin')}
+            />
+          }
+        />
+        <Route
+          path="/vozidlo/:slug"
+          element={<CarDetailPage cars={cars} />}
+        />
+        <Route
+          path="/kontakt"
+          element={<KontaktPage />}
+        />
+        <Route
+          path="/admin"
+          element={<AdminPage onAddCar={handleAddAdminCar} onDeleteCar={handleDeleteAdminCar} onEditCar={handleEditAdminCar} adminCars={manualCars} />}
+        />
+      </Routes>
+
+      <Footer />
+
+      <CarModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddCar}
+      />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

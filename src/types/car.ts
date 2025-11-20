@@ -17,4 +17,6 @@ export interface Car {
   vin?: string;
   description?: string;
   source?: 'xml' | 'admin'; // Track if car is from XML feed or admin-added
+  reservedUntil?: string; // ISO date string for reservation expiry
+  showOnHomepage?: boolean; // Flag to show in "Najnovšie vozidlá" section
 }

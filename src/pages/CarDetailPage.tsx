@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import MiniHero from '../components/MiniHero';
 import { Car } from '../types/car';
+import { equipmentCategories } from '../data/equipmentOptions';
 
 interface CarDetailPageProps {
   cars: Car[];
@@ -272,16 +273,29 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
         {/* Features */}
         {car.features && car.features.length > 0 && (
-          <div className="w-4/5 mx-auto">
+          <div className="w-4/5 mx-auto mb-10">
             <h2 className="text-2xl font-semibold mb-5 font-jost">Výbava</h2>
-            <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-10 p-0 list-none">
-              {car.features.map((feature, index) => (
-                <li key={index} className="flex items-center font-montserrat">
-                  <span className="text-blue-500 font-bold mr-2">✓</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-6">
+              {equipmentCategories.map((category) => {
+                const categoryFeatures = car.features?.filter(feature => category.options.includes(feature)) || [];
+
+                if (categoryFeatures.length === 0) return null;
+
+                return (
+                  <div key={category.name}>
+                    <h3 className="text-xl font-semibold mb-3 text-gray-800 font-jost">{category.name}</h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 p-0 list-none">
+                      {categoryFeatures.map((feature, index) => (
+                        <li key={index} className="flex items-center font-montserrat">
+                          <span className="text-blue-500 font-bold mr-2">✓</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 

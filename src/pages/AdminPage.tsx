@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Car } from '../types/car';
 import MiniHero from '../components/MiniHero';
+import { equipmentCategories } from '../data/equipmentOptions';
 
 interface AdminPageProps {
   onAddCar: (car: Car) => void;
@@ -18,9 +19,28 @@ interface Announcement {
 }
 
 const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar, adminCars }) => {
-  const [activeTab, setActiveTab] = useState<'cars' | 'announcements' | 'manage'>('cars');
+  const [activeTab, setActiveTab] = useState<'cars' | 'announcements' | 'manage' | 'vacation'>('cars');
   const [editingCar, setEditingCar] = useState<Car | null>(null);
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+
+  // Load announcements from localStorage
+  const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
+    try {
+      const stored = window.localStorage.getItem('mt-autos-announcements');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Load vacation status from localStorage
+  const [vacationPhones, setVacationPhones] = useState<string[]>(() => {
+    try {
+      const stored = window.localStorage.getItem('mt-autos-vacation-phones');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
   
   // Car form state
   const [carForm, setCarForm] = useState({
@@ -38,11 +58,14 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
     vin: '',
     description: '',
     features: [] as string[],
-    images: [] as string[]
+    images: [] as string[],
+    reservedUntil: '',
+    showOnHomepage: false
   });
   
   const [newFeature, setNewFeature] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   
   // Announcement form state
   const [announcementForm, setAnnouncementForm] = useState({
@@ -50,8 +73,27 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
     message: ''
   });
 
+  // Persist announcements to localStorage
+  useEffect(() => {
+    window.localStorage.setItem('mt-autos-announcements', JSON.stringify(announcements));
+  }, [announcements]);
+
+  // Persist vacation phones to localStorage
+  useEffect(() => {
+    window.localStorage.setItem('mt-autos-vacation-phones', JSON.stringify(vacationPhones));
+  }, [vacationPhones]);
+
   const handleCarFormChange = (field: string, value: any) => {
     setCarForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const toggleFeature = (feature: string) => {
+    setCarForm(prev => ({
+      ...prev,
+      features: prev.features.includes(feature)
+        ? prev.features.filter(f => f !== feature)
+        : [...prev.features, feature]
+    }));
   };
 
   const addFeature = () => {
@@ -115,7 +157,9 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
       vin: car.vin || '',
       description: car.description || '',
       features: car.features || [],
-      images: car.images || []
+      images: car.images || [],
+      reservedUntil: car.reservedUntil || '',
+      showOnHomepage: car.showOnHomepage || false
     });
     setActiveTab('cars');
   };
@@ -138,7 +182,9 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
       vin: '',
       description: '',
       features: [],
-      images: []
+      images: [],
+      reservedUntil: '',
+      showOnHomepage: false
     });
   };
 
@@ -168,6 +214,8 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
       drivetrain: carForm.drivetrain || undefined,
       vin: carForm.vin || undefined,
       description: carForm.description || undefined,
+      reservedUntil: carForm.reservedUntil || undefined,
+      showOnHomepage: carForm.showOnHomepage,
       source: 'admin'
     };
 
@@ -195,7 +243,9 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
       vin: '',
       description: '',
       features: [],
-      images: []
+      images: [],
+      reservedUntil: '',
+      showOnHomepage: false
     });
     
     setIsEditMode(false);
@@ -246,6 +296,18 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
     }
   };
 
+  const toggleVacationPhone = (phone: string) => {
+    setVacationPhones(prev => {
+      if (prev.includes(phone)) {
+        return prev.filter(p => p !== phone);
+      } else {
+        return [...prev, phone];
+      }
+    });
+  };
+
+  const availablePhones = ['+421 915 511 111', '+421 915 834 574'];
+
   return (
     <div className="min-h-screen bg-white">
       <MiniHero title="ADMIN PANEL" />
@@ -282,6 +344,16 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
             }`}
           >
             Oznamy
+          </button>
+          <button
+            onClick={() => setActiveTab('vacation')}
+            className={`px-6 py-3 rounded-lg font-montserrat ${
+              activeTab === 'vacation'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            Dovolenka
           </button>
         </div>
 
@@ -464,38 +536,37 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
               {/* Features */}
               <div>
                 <label className="block text-sm font-semibold mb-2 font-jost">Výbava</label>
-                <div className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    value={newFeature}
-                    onChange={(e) => setNewFeature(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())}
-                    placeholder="Pridajte položku výbavy a stlačte Enter"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-montserrat"
-                  />
-                  <button
-                    type="button"
-                    onClick={addFeature}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-montserrat"
-                  >
-                    Pridať
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {carForm.features.map((feature, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 bg-gray-200 rounded-full text-sm font-montserrat"
-                    >
-                      {feature}
+
+                {/* Equipment categories */}
+                <div className="space-y-2">
+                  {equipmentCategories.map((category) => (
+                    <div key={category.name} className="border border-gray-300 rounded-lg overflow-hidden">
                       <button
                         type="button"
-                        onClick={() => removeFeature(index)}
-                        className="ml-2 text-red-600 hover:text-red-800"
+                        onClick={() => setExpandedCategory(expandedCategory === category.name ? null : category.name)}
+                        className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-left font-semibold flex items-center justify-between font-jost"
                       >
-                        ×
+                        <span>{category.name}</span>
+                        <span className="text-sm text-gray-600 font-montserrat">
+                          {carForm.features.filter(f => category.options.includes(f)).length}/{category.options.length} {expandedCategory === category.name ? '▲' : '▼'}
+                        </span>
                       </button>
-                    </span>
+                      {expandedCategory === category.name && (
+                        <div className="p-4 bg-white grid grid-cols-2 md:grid-cols-3 gap-2">
+                          {category.options.map((option) => (
+                            <label key={option} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                              <input
+                                type="checkbox"
+                                checked={carForm.features.includes(option)}
+                                onChange={() => toggleFeature(option)}
+                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                              />
+                              <span className="text-sm font-montserrat">{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -532,6 +603,35 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
                   ))}
                 </div>
               </div>
+
+              {/* Reservation Date */}
+              <div>
+                <label className="block text-sm font-semibold mb-2 font-jost">Rezervované do</label>
+                <input
+                  type="date"
+                  value={carForm.reservedUntil}
+                  onChange={(e) => handleCarFormChange('reservedUntil', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-montserrat"
+                />
+                <p className="text-sm text-gray-500 mt-1 font-montserrat">Ak je vozidlo rezervované, vyberte dátum do kedy</p>
+              </div>
+
+              {/* Show on Homepage */}
+              <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <input
+                  type="checkbox"
+                  id="showOnHomepage"
+                  checked={carForm.showOnHomepage}
+                  onChange={(e) => handleCarFormChange('showOnHomepage', e.target.checked)}
+                  className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                />
+                <label htmlFor="showOnHomepage" className="ml-3 text-sm font-semibold text-blue-900 font-jost">
+                  Zobraziť na domovskej stránke v sekcii "Najnovšie vozidlá"
+                </label>
+              </div>
+              <p className="text-sm text-gray-600 font-montserrat -mt-2">
+                ⓘ Maximálne 4 vozidlá sa zobrazia na domovskej stránke. Ak nie je označené žiadne, zobrazia sa najnovšie 4 vozidlá.
+              </p>
 
               <button
                 type="submit"
@@ -684,6 +784,39 @@ const AdminPage: React.FC<AdminPageProps> = ({ onAddCar, onDeleteCar, onEditCar,
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Vacation Tab */}
+        {activeTab === 'vacation' && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold mb-6 font-jost">Dovolenka - Správa telefónnych čísel</h2>
+            <p className="text-gray-600 mb-6 font-montserrat">
+              Aktivujte dovolenku pre telefónne čísla. Čísla na dovolenke nebudú zobrazené v pätičke ani na kontaktnej stránke.
+            </p>
+
+            <div className="space-y-4">
+              {availablePhones.map((phone) => (
+                <div key={phone} className="flex items-center justify-between border border-gray-200 rounded-lg p-4">
+                  <div>
+                    <p className="text-lg font-semibold font-montserrat">{phone}</p>
+                    <p className="text-sm text-gray-600 font-montserrat">
+                      {vacationPhones.includes(phone) ? 'Na dovolenke - číslo je skryté' : 'Aktívne - číslo je zobrazené'}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => toggleVacationPhone(phone)}
+                    className={`px-6 py-2 rounded-lg font-montserrat font-semibold transition-colors ${
+                      vacationPhones.includes(phone)
+                        ? 'bg-green-600 hover:bg-green-700 text-white'
+                        : 'bg-orange-600 hover:bg-orange-700 text-white'
+                    }`}
+                  >
+                    {vacationPhones.includes(phone) ? 'Ukončiť dovolenku' : 'Aktivovať dovolenku'}
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         )}

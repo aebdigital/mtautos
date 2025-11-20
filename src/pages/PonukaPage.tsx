@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CarCard from '../components/CarCard';
 import CarFilter from '../components/CarFilter';
 import MiniHero from '../components/MiniHero';
@@ -11,6 +12,7 @@ interface PonukaPageProps {
 }
 
 const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading, onAddCarClick }) => {
+  const navigate = useNavigate();
   const [filteredCars, setFilteredCars] = useState<Car[]>(cars);
 
   React.useEffect(() => {
@@ -27,7 +29,7 @@ const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading, onAddCarClick 
 
   const handleCarClick = (car: Car) => {
     const slug = createCarSlug(car);
-    window.location.href = `/vozidlo/${slug}`;
+    navigate(`/vozidlo/${slug}`);
   };
 
   const handleFilter = (filtered: Car[]) => {
