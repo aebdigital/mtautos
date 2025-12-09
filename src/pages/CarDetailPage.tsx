@@ -5,6 +5,17 @@ import { Car } from '../types/car';
 import { equipmentCategories } from '../data/equipmentOptions';
 import { getCarFullById, PublicCarFull } from '../lib/publicCars';
 
+// Import local SVG icons
+import pohonIcon from '../images/pohon.svg';
+import palivoIcon from '../images/palivo.svg';
+import kmIcon from '../images/km.svg';
+import vykonIcon from '../images/vykon.svg';
+import prevodovkaIcon from '../images/prevodovka.svg';
+import motorIcon from '../images/motor.svg';
+import rokIcon from '../images/rok.svg';
+import karoseriaIcon from '../images/karoseria.svg';
+import vinIcon from '../images/VIN.svg';
+
 interface CarDetailPageProps {
   cars: Car[];
 }
@@ -83,15 +94,15 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
   const images = allImages.length > 0 ? allImages : [car.image];
 
   const icons = {
-    'Pohon': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-3-1.svg',
-    'Palivo': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-4.svg',
-    'Kilometre': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-5.svg',
-    'Výkon': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-6.svg',
-    'Prevodovka': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-7.svg',
-    'Objem motora': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-9.svg',
-    'Rok výroby': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-10.svg',
-    'Karoséria': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-11.svg',
-    'VIN': 'https://www.mtautos.sk/wp-content/uploads/2025/05/image-8.svg',
+    'Pohon': pohonIcon,
+    'Palivo': palivoIcon,
+    'Kilometre': kmIcon,
+    'Výkon': vykonIcon,
+    'Prevodovka': prevodovkaIcon,
+    'Objem motora': motorIcon,
+    'Rok výroby': rokIcon,
+    'Karoséria': karoseriaIcon,
+    'VIN': vinIcon,
   };
 
   const basicData = [
