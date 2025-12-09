@@ -37,7 +37,7 @@ const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading }) => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <MiniHero title="PONUKA VOZIDIEL" />
+      <MiniHero title="PONUKA" />
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div className="text-xl font-montserrat text-gray-600">

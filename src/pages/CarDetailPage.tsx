@@ -17,6 +17,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxVisible, setLightboxVisible] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [mobileImageIndex, setMobileImageIndex] = useState(0);
 
   useEffect(() => {
     const loadCarDetails = async () => {
@@ -133,13 +134,55 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     setLightboxIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  const nextMobileImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMobileImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevMobileImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMobileImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <MiniHero title="DETAIL VOZIDLA" />
+      <MiniHero title="VOZIDLO" />
 
       <div className="py-8">
-        {/* Image Gallery */}
-        <div className="relative mb-8 w-full overflow-x-auto" style={{ paddingLeft: '5px', paddingRight: '5px' }}>
+        {/* Mobile Image View (Single Image with Slider) */}
+        <div className="block md:hidden mb-8 w-full">
+          <div className="w-full h-[40vh] relative">
+            <img
+              src={images[mobileImageIndex]}
+              alt={`${car.brand} ${car.model}`}
+              className="w-full h-full object-cover"
+              onClick={() => openLightbox(mobileImageIndex)}
+            />
+            
+            {images.length > 1 && (
+              <>
+                <button 
+                  onClick={prevMobileImage}
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full z-10 hover:bg-black/70 focus:outline-none"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button 
+                  onClick={nextMobileImage}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full z-10 hover:bg-black/70 focus:outline-none"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
+                <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm pointer-events-none">
+                  {mobileImageIndex + 1} / {images.length}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Image Gallery */}
+        <div className="hidden md:block relative mb-8 w-full overflow-x-auto" style={{ paddingLeft: '5px', paddingRight: '5px' }}>
           {images.length > 6 && (() => {
             const mainPhotoWidth = 624 + 4;
             const smallPhotoColumns = Math.ceil((images.length - 1) / 2);
@@ -272,7 +315,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
         )}
 
         {/* Header with Title and Price */}
-        <div className="mb-8 pb-5 border-b border-gray-200 w-4/5 mx-auto">
+        <div className="mb-8 pb-5 border-b border-gray-200 w-[90%] md:w-4/5 mx-auto">
           <h1 className="text-4xl font-bold mb-2 font-jost">{car.brand} {car.model}</h1>
           <p className="text-gray-600 mb-2 font-montserrat">
             {car.year} • {car.mileage?.toLocaleString()} km • {car.fuel} • {car.transmission}
@@ -282,7 +325,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
         {/* Basic Data / Specs */}
         {basicData.length > 0 && (
-          <div className="w-4/5 mx-auto">
+          <div className="w-[90%] md:w-4/5 mx-auto">
             <h2 className="text-2xl font-semibold mb-5 font-jost">Základné údaje</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
             {basicData.map((item, index) => (
@@ -302,7 +345,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
         {/* Description */}
         {car.description && (
-          <div className="w-4/5 mx-auto mb-10">
+          <div className="w-[90%] md:w-4/5 mx-auto mb-10">
             <h2 className="text-2xl font-semibold mb-5 font-jost">Popis</h2>
             <div className="whitespace-pre-wrap font-montserrat break-words overflow-hidden bg-gray-50 p-4 rounded-lg">
               {car.description}
@@ -312,7 +355,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
         {/* Features / Equipment */}
         {car.features && car.features.length > 0 && (
-          <div className="w-4/5 mx-auto mb-10">
+          <div className="w-[90%] md:w-4/5 mx-auto mb-10">
             <h2 className="text-2xl font-semibold mb-5 font-jost">Výbava</h2>
             <div className="space-y-6">
               {equipmentCategories.map((category) => {
@@ -362,7 +405,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
         {/* Reserved Until Notice */}
         {car.reservedUntil && new Date(car.reservedUntil) > new Date() && (
-          <div className="w-4/5 mx-auto mb-10">
+          <div className="w-[90%] md:w-4/5 mx-auto mb-10">
             <div className="bg-orange-100 border border-orange-300 text-orange-800 px-4 py-3 rounded-lg font-montserrat">
               <strong>Rezervované</strong> do {new Date(car.reservedUntil).toLocaleDateString('sk-SK')}
             </div>
@@ -370,7 +413,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
         )}
 
         {/* Back Button */}
-        <div className="text-center mt-8 w-4/5 mx-auto">
+        <div className="text-center mt-8 w-[90%] md:w-4/5 mx-auto">
           <Link
             to="/ponuka"
             className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold text-lg inline-block font-montserrat"

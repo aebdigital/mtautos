@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   useEffect(() => {
@@ -27,23 +28,23 @@ const Hero: React.FC = () => {
         }}
       />
       <div className="relative container mx-auto px-4 z-10">
-        <div className="text-left max-w-4xl">
-          <h1 className="text-7xl font-bold mb-6 font-jost hero-title">
+        <div className="text-left max-w-4xl px-0 md:px-0">
+          <h1 className="text-4xl md:text-7xl font-bold mb-6 font-jost hero-title">
             VÍTAME VÁS V AUTOBAZÁRI<br />
             <span className="text-blue-400">MT AUTOS</span>{' '}
-            <span className="text-4xl text-white underline">Sučany pri Martine!</span>
+            <span className="text-2xl md:text-4xl text-white underline">Sučany pri Martine!</span>
           </h1>
-          <p className="text-2xl mb-10 max-w-3xl leading-relaxed font-montserrat">
+          <p className="text-lg md:text-2xl mb-10 max-w-3xl leading-relaxed font-montserrat">
             Vyberte si spoľahlivé vozidlo z našej ponuky nových, kontrolovaných 
             ojazdených automobilov a nechajte si ho doviesť priamo ku vám.
           </p>
-          <div className="flex space-x-6">
-            <button className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded text-white font-bold text-lg font-montserrat cta-btn border-2 border-white">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
+            <Link to="/ponuka" className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded text-white font-bold text-lg font-montserrat cta-btn border-2 border-white w-full md:w-auto text-center inline-block">
               Pozrite si ponuku
-            </button>
-            <button className="bg-black hover:bg-gray-800 px-6 py-3 rounded text-white font-bold text-lg font-montserrat cta-btn border-2 border-white">
+            </Link>
+            <Link to="/kontakt" className="bg-black hover:bg-gray-800 px-6 py-3 rounded text-white font-bold text-lg font-montserrat cta-btn border-2 border-white w-full md:w-auto text-center inline-block">
               Kontakt
-            </button>
+            </Link>
           </div>
         </div>
       </div>
