@@ -1,7 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import MiniHero from '../components/MiniHero';
 import PrivacyModal from '../components/PrivacyModal';
 import { getActivePhonesForSite } from '../lib/publicContact';
+
+declare global {
+  interface Window {
+    turnstile: {
+      render: (container: HTMLElement, options: {
+        sitekey: string;
+        callback: (token: string) => void;
+        'expired-callback'?: () => void;
+        'error-callback'?: () => void;
+      }) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
+
+const TURNSTILE_SITE_KEY = '0x4AAAAAACGYwHRtj640z_Zr';
 
 interface FormData {
   name: string;
@@ -30,6 +47,43 @@ const KontaktPage: React.FC = () => {
     type: 'idle',
     message: '',
   });
+  const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  const initTurnstile = useCallback(() => {
+    if (turnstileRef.current && window.turnstile && !widgetIdRef.current) {
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token: string) => {
+          setTurnstileToken(token);
+        },
+        'expired-callback': () => {
+          setTurnstileToken('');
+        },
+        'error-callback': () => {
+          setTurnstileToken('');
+        },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    // Check if turnstile is already loaded
+    if (window.turnstile) {
+      initTurnstile();
+    } else {
+      // Wait for turnstile script to load
+      const checkTurnstile = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(checkTurnstile);
+          initTurnstile();
+        }
+      }, 100);
+
+      return () => clearInterval(checkTurnstile);
+    }
+  }, [initTurnstile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -38,6 +92,15 @@ const KontaktPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check for Turnstile token
+    if (!turnstileToken) {
+      setFormStatus({
+        type: 'error',
+        message: 'Prosím počkajte na overenie bezpečnostnej kontroly.',
+      });
+      return;
+    }
 
     // Reset status
     setFormStatus({ type: 'loading', message: 'Odosielam...' });
@@ -48,7 +111,10 @@ const KontaktPage: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          'cf-turnstile-response': turnstileToken,
+        }),
       });
 
       const result = await response.json();
@@ -72,11 +138,22 @@ const KontaktPage: React.FC = () => {
         message: '',
       });
 
+      // Reset Turnstile
+      setTurnstileToken('');
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
+
     } catch (error) {
       setFormStatus({
         type: 'error',
         message: error instanceof Error ? error.message : 'Nastala chyba pri odosielaní',
       });
+      // Reset Turnstile on error
+      setTurnstileToken('');
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
     }
   };
 
@@ -289,9 +366,14 @@ const KontaktPage: React.FC = () => {
                   disabled={formStatus.type === 'loading'}
                 />
 
+                {/* Cloudflare Turnstile Widget */}
+                <div className="flex justify-center">
+                  <div ref={turnstileRef}></div>
+                </div>
+
                 <button
                   type="submit"
-                  disabled={formStatus.type === 'loading'}
+                  disabled={formStatus.type === 'loading' || !turnstileToken}
                   className="w-full bg-black text-white py-3 px-6 rounded font-bold font-montserrat hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   {formStatus.type === 'loading' ? 'Odosielam...' : 'Odoslať'}

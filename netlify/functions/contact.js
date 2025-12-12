@@ -25,7 +25,60 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { name, email, phone, subject, message } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const { name, email, phone, subject, message } = body;
+    const turnstileToken = body['cf-turnstile-response'];
+
+    // Verify Turnstile token
+    const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+    if (!TURNSTILE_SECRET_KEY) {
+      console.error('Missing TURNSTILE_SECRET_KEY environment variable');
+      return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({ error: 'Server configuration error' }),
+      };
+    }
+
+    if (!turnstileToken) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({ error: 'Bezpečnostné overenie zlyhalo. Skúste to znova.' }),
+      };
+    }
+
+    // Verify the token with Cloudflare
+    const turnstileResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        secret: TURNSTILE_SECRET_KEY,
+        response: turnstileToken,
+      }),
+    });
+
+    const turnstileResult = await turnstileResponse.json();
+
+    if (!turnstileResult.success) {
+      console.error('Turnstile verification failed:', turnstileResult);
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({ error: 'Bezpečnostné overenie zlyhalo. Skúste to znova.' }),
+      };
+    }
 
     // Validate required fields
     if (!name || !email || !message) {
