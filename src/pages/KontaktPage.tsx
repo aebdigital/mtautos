@@ -3,9 +3,82 @@ import MiniHero from '../components/MiniHero';
 import PrivacyModal from '../components/PrivacyModal';
 import { getActivePhonesForSite } from '../lib/publicContact';
 
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}
+
+interface FormStatus {
+  type: 'idle' | 'loading' | 'success' | 'error';
+  message: string;
+}
+
 const KontaktPage: React.FC = () => {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [phones, setPhones] = useState<string[]>([]);
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: '',
+  });
+  const [formStatus, setFormStatus] = useState<FormStatus>({
+    type: 'idle',
+    message: '',
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Reset status
+    setFormStatus({ type: 'loading', message: 'Odosielam...' });
+
+    try {
+      const response = await fetch('/.netlify/functions/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Nastala chyba pri odosielaní');
+      }
+
+      // Success
+      setFormStatus({
+        type: 'success',
+        message: 'Vaša správa bola úspešne odoslaná. Ozveme sa Vám čo najskôr.',
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+      });
+
+    } catch (error) {
+      setFormStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Nastala chyba pri odosielaní',
+      });
+    }
+  };
 
   useEffect(() => {
     const loadPhones = async () => {
@@ -137,47 +210,91 @@ const KontaktPage: React.FC = () => {
                 Vyplňte potrebné údaje a zašleme sa Vám na najskôr
               </p>
               
-              <form className="space-y-4">
+              {formStatus.type !== 'idle' && (
+                <div
+                  className={`p-4 rounded mb-4 ${
+                    formStatus.type === 'success'
+                      ? 'bg-green-100 text-green-800 border border-green-300'
+                      : formStatus.type === 'error'
+                      ? 'bg-red-100 text-red-800 border border-red-300'
+                      : 'bg-blue-100 text-blue-800 border border-blue-300'
+                  }`}
+                >
+                  {formStatus.type === 'loading' && (
+                    <div className="flex items-center gap-2">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      {formStatus.message}
+                    </div>
+                  )}
+                  {formStatus.type !== 'loading' && formStatus.message}
+                </div>
+              )}
+
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
                     type="text"
+                    name="name"
                     placeholder="Meno"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded px-3 py-2 font-montserrat"
                     required
+                    disabled={formStatus.type === 'loading'}
                   />
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded px-3 py-2 font-montserrat"
                     required
+                    disabled={formStatus.type === 'loading'}
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
                     type="tel"
+                    name="phone"
                     placeholder="Telefón"
+                    value={formData.phone}
+                    onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded px-3 py-2 font-montserrat"
+                    disabled={formStatus.type === 'loading'}
                   />
                   <input
                     type="text"
+                    name="subject"
                     placeholder="Predmet"
+                    value={formData.subject}
+                    onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded px-3 py-2 font-montserrat"
+                    disabled={formStatus.type === 'loading'}
                   />
                 </div>
-                
+
                 <textarea
+                  name="message"
                   placeholder="Správa"
                   rows={4}
+                  value={formData.message}
+                  onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded px-3 py-2 font-montserrat"
                   required
+                  disabled={formStatus.type === 'loading'}
                 />
-                
+
                 <button
                   type="submit"
-                  className="w-full bg-black text-white py-3 px-6 rounded font-bold font-montserrat hover:bg-gray-800 transition-colors"
+                  disabled={formStatus.type === 'loading'}
+                  className="w-full bg-black text-white py-3 px-6 rounded font-bold font-montserrat hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
-                  Odoslať
+                  {formStatus.type === 'loading' ? 'Odosielam...' : 'Odoslať'}
                 </button>
               </form>
               
