@@ -309,15 +309,14 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
               →
             </button>
 
-            <div className={`relative max-w-5xl max-h-5xl transform transition-all duration-500 ease-in-out ${
+            <div className={`relative flex items-center justify-center transform transition-all duration-500 ease-in-out ${
               lightboxVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-            }`}>
-              <img
-                src={images[lightboxIndex]}
-                alt={`${car.brand} ${car.model}`}
-                className="max-w-full max-h-full object-contain transition-all duration-200 ease-in-out"
-                onClick={(e) => e.stopPropagation()}
-              />
+            }`} style={{ width: '90vw', height: '90vh' }}>
+      <img
+        src={currentImage}
+        alt="Car"
+        className="max-w-[90vw] max-h-[90vh] object-contain"
+      />
               <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-black text-sm bg-white bg-opacity-90 px-3 py-1 rounded shadow-lg z-50">
                 {lightboxIndex + 1} / {images.length}
               </div>

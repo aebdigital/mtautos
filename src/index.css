@@ -28,6 +28,7 @@ code {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 3;
+  margin-top: -5px; /* Adjust to vertically center the thumb */
 }
 
 .slider-thumb::-moz-range-thumb {
@@ -41,6 +42,7 @@ code {
   position: relative;
   z-index: 3;
   border: none;
+  margin-top: -5px; /* Adjust to vertically center the thumb */
 }
 
 .slider-thumb {
