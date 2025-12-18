@@ -313,7 +313,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
               lightboxVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
             }`} style={{ width: '90vw', height: '90vh' }}>
       <img
-        src={currentImage}
+        src={images[lightboxIndex]}
         alt="Car"
         className="max-w-[90vw] max-h-[90vh] object-contain"
       />
