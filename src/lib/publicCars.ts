@@ -14,6 +14,8 @@ export interface PublicCar {
   image: string;
   power?: string | null;
   showOnHomepage?: boolean;
+  vatDeductible?: boolean | null;
+  priceWithoutVat?: number | null;
 }
 
 export interface PublicCarDetail extends PublicCar {
@@ -51,7 +53,9 @@ export async function getCarsForPonuka(): Promise<PublicCar[]> {
       transmission,
       image,
       power,
-      show_on_homepage
+      show_on_homepage,
+      vat_deductible,
+      price_without_vat
     `
     )
     .eq("site_id", SITE_ID)
@@ -74,6 +78,8 @@ export async function getCarsForPonuka(): Promise<PublicCar[]> {
     image: getImageUrl(car.image),
     power: car.power,
     showOnHomepage: car.show_on_homepage,
+    vatDeductible: car.vat_deductible,
+    priceWithoutVat: car.price_without_vat,
   }));
 }
 
@@ -139,10 +145,28 @@ export async function getCarById(carId: string): Promise<PublicCarDetail | null>
   };
 }
 
-// Extended interface with computed image URLs
+// Extended interface with computed image URLs and new fields
 export interface PublicCarFull extends PublicCarDetail {
   mainImageUrl: string;
   galleryImageUrls: string[];
+  // New fields
+  doors?: string | null;
+  color?: string | null;
+  reserved?: boolean | null;
+  month?: number | null;
+  vatDeductible?: boolean | null;
+  priceWithoutVat?: number | null;
+  transmissionType?: string | null;
+  transmissionGears?: string | null;
+  airbagCount?: number | null;
+  radioCd?: boolean | null;
+  radioCdMp3?: boolean | null;
+  androidAuto?: boolean | null;
+  acType?: string | null;
+  acZones?: string | null;
+  parkingSensors?: string | null;
+  electricWindows?: string | null;
+  heatedSeats?: string | null;
 }
 
 export async function getCarFullById(carId: string): Promise<PublicCarFull | null> {
@@ -186,5 +210,23 @@ export async function getCarFullById(carId: string): Promise<PublicCarFull | nul
     showOnHomepage: data.show_on_homepage,
     mainImageUrl,
     galleryImageUrls,
+    // New fields
+    doors: data.doors,
+    color: data.color,
+    reserved: data.reserved,
+    month: data.month,
+    vatDeductible: data.vat_deductible,
+    priceWithoutVat: data.price_without_vat,
+    transmissionType: data.transmission_type,
+    transmissionGears: data.transmission_gears,
+    airbagCount: data.airbag_count,
+    radioCd: data.radio_cd,
+    radioCdMp3: data.radio_cd_mp3,
+    androidAuto: data.android_auto,
+    acType: data.ac_type,
+    acZones: data.ac_zones,
+    parkingSensors: data.parking_sensors,
+    electricWindows: data.electric_windows,
+    heatedSeats: data.heated_seats,
   };
 }

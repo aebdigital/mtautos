@@ -15,6 +15,8 @@ import motorIcon from '../images/motor.svg';
 import rokIcon from '../images/rok.svg';
 import karoseriaIcon from '../images/karoseria.svg';
 import vinIcon from '../images/VIN.svg';
+import dvereIcon from '../images/dvere.svg';
+import farbaIcon from '../images/farba.svg';
 
 interface CarDetailPageProps {
   cars: Car[];
@@ -103,6 +105,17 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     'Rok výroby': rokIcon,
     'Karoséria': karoseriaIcon,
     'VIN': vinIcon,
+    'Dvere': dvereIcon,
+    'Farba': farbaIcon,
+  };
+
+  // Helper to format transmission
+  const formatTransmission = () => {
+    if (car.transmissionType) {
+      const type = car.transmissionType === 'automatic' ? 'Automatická' : 'Manuálna';
+      return car.transmissionGears ? `${type} ${car.transmissionGears}-st.` : type;
+    }
+    return car.transmission;
   };
 
   const basicData = [
@@ -110,10 +123,12 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     { label: 'Palivo', value: car.fuel, icon: icons['Palivo'] },
     { label: 'Kilometre', value: car.mileage ? `${car.mileage.toLocaleString()} km` : null, icon: icons['Kilometre'] },
     { label: 'Výkon', value: car.power, icon: icons['Výkon'] },
-    { label: 'Prevodovka', value: car.transmission, icon: icons['Prevodovka'] },
+    { label: 'Prevodovka', value: formatTransmission(), icon: icons['Prevodovka'] },
     { label: 'Objem motora', value: car.engine, icon: icons['Objem motora'] },
-    { label: 'Rok výroby', value: car.year ? car.year.toString() : null, icon: icons['Rok výroby'] },
+    { label: 'Rok výroby', value: car.month && car.year ? `${car.month}/${car.year}` : car.year?.toString(), icon: icons['Rok výroby'] },
     { label: 'Karoséria', value: car.bodyType, icon: icons['Karoséria'] },
+    { label: 'Dvere', value: car.doors, icon: icons['Dvere'] },
+    { label: 'Farba', value: car.color, icon: icons['Farba'] },
     { label: 'VIN', value: car.vin, icon: icons['VIN'] },
   ].filter(item => item.value && item.value !== 'N/A' && item.value !== '');
 
@@ -331,6 +346,11 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
             {car.year} • {car.mileage?.toLocaleString()} km • {car.fuel} • {car.transmission}
           </p>
           <div className="text-3xl text-red-600 font-bold font-montserrat">{car.price?.toLocaleString()} €</div>
+          {car.vatDeductible && car.priceWithoutVat && (
+            <div className="inline-block bg-black text-white px-4 py-2 mt-2 text-sm font-bold font-montserrat rounded">
+              Odpočet DPH: {car.priceWithoutVat.toLocaleString()} €
+            </div>
+          )}
         </div>
 
         {/* Basic Data / Specs */}

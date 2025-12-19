@@ -89,6 +89,11 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
             <span className="font-bold text-gray-800">{car.power || 'N/A'}</span>
           </div>
         </div>
+        {car.vatDeductible && car.priceWithoutVat && (
+          <div className="bg-black text-white px-3 py-2 text-xs font-bold font-montserrat -mx-4 -mb-0">
+            Odpočet DPH: {car.priceWithoutVat.toLocaleString()} €
+          </div>
+        )}
       </div>
     </div>
   );
