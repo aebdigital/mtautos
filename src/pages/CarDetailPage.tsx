@@ -397,12 +397,18 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
                   <div key={category.name}>
                     <h3 className="text-xl font-semibold mb-3 text-gray-800 font-jost">{category.name}</h3>
                     <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 p-0 list-none">
-                      {categoryFeatures.map((feature, index) => (
-                        <li key={index} className="flex items-center font-montserrat">
-                          <span className="text-blue-500 font-bold mr-2">✓</span>
-                          {feature}
-                        </li>
-                      ))}
+                      {categoryFeatures.map((feature, index) => {
+                        // Format airbag count display
+                        const displayText = feature === 'Airbagy – počet' && car.airbagCount
+                          ? `Airbagy - ${car.airbagCount}`
+                          : feature;
+                        return (
+                          <li key={index} className="flex items-center font-montserrat">
+                            <span className="text-blue-500 font-bold mr-2">✓</span>
+                            {displayText}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 );
