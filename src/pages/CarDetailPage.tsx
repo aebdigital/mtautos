@@ -129,6 +129,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     { label: 'Karoséria', value: car.bodyType, icon: icons['Karoséria'] },
     { label: 'Dvere', value: car.doors, icon: icons['Dvere'] },
     { label: 'Farba', value: car.color, icon: icons['Farba'] },
+    { label: 'Airbagy', value: car.airbagCount ? `${car.airbagCount}x` : null, icon: icons['Karoséria'] },
     { label: 'VIN', value: car.vin, icon: icons['VIN'] },
   ].filter(item => item.value && item.value !== 'N/A' && item.value !== '');
 
