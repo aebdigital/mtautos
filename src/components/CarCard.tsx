@@ -45,6 +45,11 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
             ADMIN
           </div>
         )}
+        {isReserved && (
+          <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat">
+            REZERVOVANÉ
+          </div>
+        )}
       </div>
       <div className="px-4 pt-4">
         <h3 className="text-lg font-bold text-gray-800 mb-2">
