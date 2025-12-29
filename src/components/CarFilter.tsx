@@ -128,19 +128,19 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars, onFilter }) => {
                 <span>{minPrice.toLocaleString()} €</span>
                 <span>{maxPrice.toLocaleString()} €</span>
               </div>
-              <div className="relative h-2">
+              <div className="relative h-5">
                 {/* Track background */}
-                <div className="absolute w-full h-2 bg-gray-200 rounded-full"></div>
-                
+                <div className="absolute w-full h-2 bg-gray-200 rounded-full top-1/2 -translate-y-1/2"></div>
+
                 {/* Active range */}
-                <div 
-                  className="absolute h-2 bg-blue-500 rounded-full"
+                <div
+                  className="absolute h-2 bg-blue-500 rounded-full top-1/2 -translate-y-1/2"
                   style={{
                     left: `${((filters.priceRange[0] - minPrice) / (maxPrice - minPrice)) * 100}%`,
                     right: `${100 - ((filters.priceRange[1] - minPrice) / (maxPrice - minPrice)) * 100}%`
                   }}
                 ></div>
-                
+
                 {/* Min slider */}
                 <input
                   type="range"
@@ -153,9 +153,9 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars, onFilter }) => {
                       priceRange: [parseInt(e.target.value), filters.priceRange[1]]
                     });
                   }}
-                  className="absolute w-full h-2 bg-transparent appearance-none cursor-pointer slider-thumb"
+                  className="slider-thumb"
                 />
-                
+
                 {/* Max slider */}
                 <input
                   type="range"
@@ -168,7 +168,7 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars, onFilter }) => {
                       priceRange: [filters.priceRange[0], parseInt(e.target.value)]
                     });
                   }}
-                  className="absolute w-full h-2 bg-transparent appearance-none cursor-pointer slider-thumb"
+                  className="slider-thumb"
                 />
               </div>
               
@@ -216,19 +216,19 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars, onFilter }) => {
                 <span>{minYear}</span>
                 <span>{maxYear}</span>
               </div>
-              <div className="relative h-2">
+              <div className="relative h-5">
                 {/* Track background */}
-                <div className="absolute w-full h-2 bg-gray-200 rounded-full"></div>
-                
+                <div className="absolute w-full h-2 bg-gray-200 rounded-full top-1/2 -translate-y-1/2"></div>
+
                 {/* Active range */}
-                <div 
-                  className="absolute h-2 bg-blue-500 rounded-full"
+                <div
+                  className="absolute h-2 bg-blue-500 rounded-full top-1/2 -translate-y-1/2"
                   style={{
                     left: `${((filters.yearRange[0] - minYear) / (maxYear - minYear)) * 100}%`,
                     right: `${100 - ((filters.yearRange[1] - minYear) / (maxYear - minYear)) * 100}%`
                   }}
                 ></div>
-                
+
                 {/* Min slider */}
                 <input
                   type="range"
@@ -241,9 +241,9 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars, onFilter }) => {
                       yearRange: [parseInt(e.target.value), filters.yearRange[1]]
                     });
                   }}
-                  className="absolute w-full h-2 bg-transparent appearance-none cursor-pointer slider-thumb"
+                  className="slider-thumb"
                 />
-                
+
                 {/* Max slider */}
                 <input
                   type="range"
@@ -256,7 +256,7 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars, onFilter }) => {
                       yearRange: [filters.yearRange[0], parseInt(e.target.value)]
                     });
                   }}
-                  className="absolute w-full h-2 bg-transparent appearance-none cursor-pointer slider-thumb"
+                  className="slider-thumb"
                 />
               </div>
               
