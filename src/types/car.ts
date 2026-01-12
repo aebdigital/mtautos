@@ -21,4 +21,5 @@ export interface Car {
   showOnHomepage?: boolean; // Flag to show in "Najnovšie vozidlá" section
   vatDeductible?: boolean; // Flag for VAT deductible
   priceWithoutVat?: number; // Price without VAT
+  reserved?: boolean; // Flag for reserved status
 }

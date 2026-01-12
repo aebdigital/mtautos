@@ -41,6 +41,7 @@ function AppContent() {
           showOnHomepage: car.showOnHomepage ?? false,
           vatDeductible: car.vatDeductible ?? false,
           priceWithoutVat: car.priceWithoutVat ?? undefined,
+          reserved: car.reserved ?? false,
         }));
 
         setSupabaseCars(cars);

@@ -16,6 +16,7 @@ export interface PublicCar {
   showOnHomepage?: boolean;
   vatDeductible?: boolean | null;
   priceWithoutVat?: number | null;
+  reserved?: boolean | null;
 }
 
 export interface PublicCarDetail extends PublicCar {
@@ -55,10 +56,12 @@ export async function getCarsForPonuka(): Promise<PublicCar[]> {
       power,
       show_on_homepage,
       vat_deductible,
-      price_without_vat
+      price_without_vat,
+      reserved
     `
     )
     .eq("site_id", SITE_ID)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -80,6 +83,7 @@ export async function getCarsForPonuka(): Promise<PublicCar[]> {
     showOnHomepage: car.show_on_homepage,
     vatDeductible: car.vat_deductible,
     priceWithoutVat: car.price_without_vat,
+    reserved: car.reserved,
   }));
 }
 
@@ -112,6 +116,7 @@ export async function getCarById(carId: string): Promise<PublicCarDetail | null>
     )
     .eq("id", carId)
     .eq("site_id", SITE_ID)
+    .is("deleted_at", null)
     .single();
 
   if (error) {
@@ -175,6 +180,7 @@ export async function getCarFullById(carId: string): Promise<PublicCarFull | nul
     .select("*")
     .eq("id", carId)
     .eq("site_id", SITE_ID)
+    .is("deleted_at", null)
     .single();
 
   if (error) {

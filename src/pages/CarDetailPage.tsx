@@ -346,11 +346,18 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
             {car.year} • {car.mileage?.toLocaleString()} km • {car.fuel} • {car.transmission}
           </p>
           <div className="text-3xl text-red-600 font-bold font-montserrat">{car.price?.toLocaleString()} €</div>
-          {car.vatDeductible && car.priceWithoutVat && (
-            <div className="inline-block bg-black text-white px-4 py-2 mt-2 text-sm font-bold font-montserrat rounded">
-              Odpočet DPH: {car.priceWithoutVat.toLocaleString()} €
-            </div>
-          )}
+          <div className="flex flex-wrap gap-2 mt-2">
+            {car.reserved && (
+              <div className="inline-block bg-black text-white px-4 py-2 text-sm font-bold font-montserrat rounded">
+                REZERVOVANÉ
+              </div>
+            )}
+            {car.vatDeductible && car.priceWithoutVat && (
+              <div className="inline-block bg-black text-white px-4 py-2 text-sm font-bold font-montserrat rounded">
+                Odpočet DPH: {car.priceWithoutVat.toLocaleString()} €
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Basic Data / Specs */}

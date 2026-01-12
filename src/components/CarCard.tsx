@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Car } from '../types/car';
 
 // Import local SVG icons
@@ -9,14 +10,15 @@ import vykonIcon from '../images/vykon.svg';
 
 interface CarCardProps {
   car: Car;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
   const isAdminAdded = car.source === 'admin';
 
-  // Check if car is reserved (reservation date is in the future)
-  const isReserved = car.reservedUntil && new Date(car.reservedUntil) > new Date();
+  // Check if car is reserved (either by reserved boolean or reservation date in the future)
+  const isReservedByDate = car.reservedUntil && new Date(car.reservedUntil) > new Date();
+  const isReserved = car.reserved || isReservedByDate;
 
   // Format reservation date
   const formatReservationDate = (dateStr: string) => {
@@ -24,9 +26,17 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
     return date.toLocaleDateString('sk-SK', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
+  // Create URL slug for the car
+  const carSlug = `${car.brand}-${car.model}-${car.year}-${car.id}`
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
   return (
-    <div
-      className={`bg-white shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all car-card ${
+    <Link
+      to={`/vozidlo/${carSlug}`}
+      className={`bg-white shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all car-card block ${
         isAdminAdded ? 'ring-2 ring-red-500 shadow-red-200' : ''
       }`}
       onClick={onClick}
@@ -55,7 +65,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
         <h3 className="text-lg font-bold text-gray-800 mb-2">
           {car.brand} {car.model}
         </h3>
-        {isReserved && car.reservedUntil && (
+        {isReservedByDate && car.reservedUntil && (
           <div className="mb-2 bg-orange-100 border border-orange-300 text-orange-800 px-2 py-1 rounded text-xs font-semibold font-montserrat">
             Rezervované do {formatReservationDate(car.reservedUntil)}
           </div>
@@ -100,7 +110,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 
