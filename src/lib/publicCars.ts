@@ -235,6 +235,6 @@ export async function getCarFullById(carId: string): Promise<PublicCarFull | nul
     parkingSensors: data.parking_sensors,
     electricWindows: data.electric_windows,
     heatedSeats: data.heated_seats,
-    stkValidity: data.stk_validity,
+    stkValidity: data.stk_valid_until,
   };
 }
