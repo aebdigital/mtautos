@@ -405,6 +405,26 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
                     <h3 className="text-xl font-semibold mb-3 text-gray-800 font-jost">{category.name}</h3>
                     <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 p-0 list-none">
                       {categoryFeatures.map((feature, index) => {
+                        // Translation mappings for database values
+                        const parkingSensorsMap: Record<string, string> = {
+                          'front': 'Predné',
+                          'rear': 'Zadné',
+                          'front_rear': 'Predné + Zadné',
+                        };
+                        const acTypeMap: Record<string, string> = {
+                          'manual': 'Manuálna',
+                          'automatic': 'Automatická',
+                        };
+                        const electricWindowsMap: Record<string, string> = {
+                          '2_front': '2x (predné)',
+                          '4_all': '4x (všetky)',
+                        };
+                        const heatedSeatsMap: Record<string, string> = {
+                          'front': 'Predné',
+                          'front_rear': 'Predné + Zadné',
+                          'all': 'Všetky',
+                        };
+
                         // Format feature display with values where available
                         let displayText = feature;
                         let valueText = '';
@@ -416,13 +436,14 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
                           displayText = 'Počet airbagov';
                           valueText = car.airbagCount.toString();
                         } else if (feature === 'Klimatizácia' && car.acType) {
-                          valueText = car.acType + (car.acZones ? ` (${car.acZones})` : '');
+                          const acTypeTranslated = acTypeMap[car.acType] || car.acType;
+                          valueText = acTypeTranslated + (car.acZones ? ` (${car.acZones})` : '');
                         } else if (feature === 'Parkovacie senzory' && car.parkingSensors) {
-                          valueText = car.parkingSensors;
+                          valueText = parkingSensorsMap[car.parkingSensors] || car.parkingSensors;
                         } else if (feature === 'Elektrické okná' && car.electricWindows) {
-                          valueText = car.electricWindows;
+                          valueText = electricWindowsMap[car.electricWindows] || car.electricWindows;
                         } else if (feature === 'Vyhrievané sedadlá' && car.heatedSeats) {
-                          valueText = car.heatedSeats;
+                          valueText = heatedSeatsMap[car.heatedSeats] || car.heatedSeats;
                         }
 
                         return (
