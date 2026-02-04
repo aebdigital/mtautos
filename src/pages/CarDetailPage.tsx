@@ -405,14 +405,33 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
                     <h3 className="text-xl font-semibold mb-3 text-gray-800 font-jost">{category.name}</h3>
                     <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 p-0 list-none">
                       {categoryFeatures.map((feature, index) => {
-                        // Format airbag count display
-                        const displayText = feature === 'Airbagy – počet' && car.airbagCount
-                          ? `Airbagy - ${car.airbagCount}`
-                          : feature;
+                        // Format feature display with values where available
+                        let displayText = feature;
+                        let valueText = '';
+
+                        if (feature === 'Airbagy – počet' && car.airbagCount) {
+                          displayText = 'Počet airbagov';
+                          valueText = car.airbagCount.toString();
+                        } else if (feature === 'Airbagy' && car.airbagCount) {
+                          displayText = 'Počet airbagov';
+                          valueText = car.airbagCount.toString();
+                        } else if (feature === 'Klimatizácia' && car.acType) {
+                          valueText = car.acType + (car.acZones ? ` (${car.acZones})` : '');
+                        } else if (feature === 'Parkovacie senzory' && car.parkingSensors) {
+                          valueText = car.parkingSensors;
+                        } else if (feature === 'Elektrické okná' && car.electricWindows) {
+                          valueText = car.electricWindows;
+                        } else if (feature === 'Vyhrievané sedadlá' && car.heatedSeats) {
+                          valueText = car.heatedSeats;
+                        }
+
                         return (
-                          <li key={index} className="flex items-center font-montserrat">
-                            <span className="text-blue-500 font-bold mr-2">✓</span>
-                            {displayText}
+                          <li key={index} className="flex items-start font-montserrat">
+                            <span className="text-blue-500 font-bold mr-2 mt-0.5">✓</span>
+                            <div className="flex flex-col">
+                              <span>{displayText}</span>
+                              {valueText && <span className="text-gray-600 text-sm font-semibold">{valueText}</span>}
+                            </div>
                           </li>
                         );
                       })}
