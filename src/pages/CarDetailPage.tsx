@@ -419,6 +419,8 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
                         const electricWindowsMap: Record<string, string> = {
                           '2_front': '2x (predné)',
                           '4_all': '4x (všetky)',
+                          '2': '2x (predné)',
+                          '4': '4x (všetky)',
                         };
                         const heatedSeatsMap: Record<string, string> = {
                           'front': 'Predné',
