@@ -172,6 +172,7 @@ export interface PublicCarFull extends PublicCarDetail {
   parkingSensors?: string | null;
   electricWindows?: string | null;
   heatedSeats?: string | null;
+  stkValidity?: string | null;
 }
 
 export async function getCarFullById(carId: string): Promise<PublicCarFull | null> {
@@ -234,5 +235,6 @@ export async function getCarFullById(carId: string): Promise<PublicCarFull | nul
     parkingSensors: data.parking_sensors,
     electricWindows: data.electric_windows,
     heatedSeats: data.heated_seats,
+    stkValidity: data.stk_validity,
   };
 }
