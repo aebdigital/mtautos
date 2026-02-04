@@ -129,7 +129,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     { label: 'Karoséria', value: car.bodyType, icon: icons['Karoséria'] },
     { label: 'Dvere', value: car.doors, icon: icons['Dvere'] },
     { label: 'Farba', value: car.color, icon: icons['Farba'] },
-    { label: 'Platnosť STK/EK', value: car.stkValidity, icon: icons['Rok výroby'] },
+    { label: 'Platnosť STK/EK', value: car.stkValidity ? (() => { const d = new Date(car.stkValidity); return `${d.getMonth() + 1}/${d.getFullYear()}`; })() : null, icon: icons['Rok výroby'] },
     { label: 'VIN', value: car.vin, icon: icons['VIN'] },
   ].filter(item => item.value && item.value !== 'N/A' && item.value !== '');
 
