@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://www.mtautos.sk/sitemap.xml
+Sitemap: https://www.mtautos.sk/.netlify/functions/sitemap
