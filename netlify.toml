@@ -9,6 +9,11 @@
   status = 200
 
 [[redirects]]
+  from = "/googlefdf41dd69ebcabdb.html"
+  to = "/googlefdf41dd69ebcabdb.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
