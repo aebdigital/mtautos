@@ -4,6 +4,7 @@ import CarCard from '../components/CarCard';
 import CarFilter from '../components/CarFilter';
 import MiniHero from '../components/MiniHero';
 import { Car } from '../types/car';
+import { Helmet } from 'react-helmet-async';
 
 interface PonukaPageProps {
   cars: Car[];
@@ -44,7 +45,7 @@ const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading }) => {
             Zobrazené: {filteredCars.length} z {cars.length} vozidiel
           </div>
         </div>
-        
+
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
             <div className="text-2xl font-montserrat">Načítavam vozidlá...</div>
@@ -55,7 +56,7 @@ const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading }) => {
             <div className="lg:col-span-1">
               <CarFilter cars={cars} onFilter={handleFilter} />
             </div>
-            
+
             {/* Cars Grid */}
             <div className="lg:col-span-3">
               {filteredCars.length === 0 ? (
@@ -66,9 +67,9 @@ const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading }) => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredCars.map((car) => (
-                    <CarCard 
-                      key={car.id} 
-                      car={car} 
+                    <CarCard
+                      key={car.id}
+                      car={car}
                       onClick={() => handleCarClick(car)}
                     />
                   ))}

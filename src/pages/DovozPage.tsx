@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MiniHero from '../components/MiniHero';
+import { Helmet } from 'react-helmet-async';
 
 const DovozPage: React.FC = () => {
   const features = [
@@ -43,8 +44,15 @@ const DovozPage: React.FC = () => {
   ];
 
   return (
-    <>
-      <MiniHero title="DOVOZ VOZIDIEL" />
+    <div className="min-h-screen bg-white font-montserrat">
+      <Helmet>
+        <title>Dovoz vozidiel na objednávku | MT AUTOS</title>
+        <meta
+          name="description"
+          content="Bezpečný dovoz vozidiel zo zahraničia. Preverenie technického stavu, vybavíme za vás administratívu a prihlásenie. Dovoz áut na kľúč."
+        />
+      </Helmet>
+      <MiniHero title="DOVOZ" />
 
       {/* Intro Section */}
       <section className="py-20 bg-white">
@@ -130,7 +138,7 @@ const DovozPage: React.FC = () => {
           </Link>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

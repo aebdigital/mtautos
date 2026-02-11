@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MiniHero from '../components/MiniHero';
 
 const PZPPage: React.FC = () => {
@@ -55,7 +56,14 @@ const PZPPage: React.FC = () => {
     ];
 
     return (
-        <>
+        <div className="min-h-screen bg-white font-montserrat">
+            <Helmet>
+                <title>Poistenie vozidiel PZP a havarijné | MT AUTOS</title>
+                <meta
+                    name="description"
+                    content="Najvýhodnejšie PZP a havarijné poistenie. Porovnanie cien všetkých poisťovní. Uzatvorenie poistenia na počkanie pri kúpe vozidla."
+                />
+            </Helmet>
             <MiniHero title="PZP + HAV POISTENIE" />
 
             {/* Intro */}
@@ -164,7 +172,7 @@ const PZPPage: React.FC = () => {
                     </Link>
                 </div>
             </section>
-        </>
+        </div>
     );
 };
 

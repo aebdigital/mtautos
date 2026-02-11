@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MiniHero from '../components/MiniHero';
 import { Car } from '../types/car';
 import { equipmentCategories } from '../data/equipmentOptions';
@@ -173,6 +174,46 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
 
   return (
     <div className="min-h-screen bg-white">
+      {car && (
+        <Helmet>
+          <title>{`${car.brand} ${car.model} ${car.year} | MT AUTOS`}</title>
+          <meta
+            name="description"
+            content={`Predaj ${car.brand} ${car.model} ${car.year}, ${car.fuel}, ${car.power || ''}, ${car.mileage?.toLocaleString()} km. Cena: ${car.price?.toLocaleString()} €. ${car.description?.slice(0, 150) || ''}...`}
+          />
+          <meta property="og:title" content={`${car.brand} ${car.model} ${car.year} | MT AUTOS`} />
+          <meta property="og:description" content={`Cena: ${car.price?.toLocaleString()} € | ${car.fuel} | ${car.year} | ${car.mileage?.toLocaleString()} km`} />
+          <meta property="og:image" content={car.mainImageUrl} />
+          <meta property="product:brand" content={car.brand} />
+          <meta property="product:price:amount" content={car.price?.toString()} />
+          <meta property="product:price:currency" content="EUR" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              "name": `${car.brand} ${car.model}`,
+              "image": [
+                car.mainImageUrl,
+                ...(car.galleryImageUrls?.slice(0, 5) || [])
+              ],
+              "description": car.description || `${car.brand} ${car.model} ${car.year}`,
+              "brand": {
+                "@type": "Brand",
+                "name": car.brand
+              },
+              "offers": {
+                "@type": "Offer",
+                "url": window.location.href,
+                "priceCurrency": "EUR",
+                "price": car.price,
+                "availability": car.reserved ? "https://schema.org/Reserved" : "https://schema.org/InStock",
+                "itemCondition": "https://schema.org/UsedCondition"
+              }
+            })}
+          </script>
+        </Helmet>
+      )}
+
       <MiniHero title="VOZIDLO" />
 
       <div className="py-8">
@@ -185,16 +226,16 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
               className="w-full h-full object-cover"
               onClick={() => openLightbox(mobileImageIndex)}
             />
-            
+
             {images.length > 1 && (
               <>
-                <button 
+                <button
                   onClick={prevMobileImage}
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full z-10 hover:bg-black/70 focus:outline-none"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 </button>
-                <button 
+                <button
                   onClick={nextMobileImage}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full z-10 hover:bg-black/70 focus:outline-none"
                 >
@@ -295,9 +336,8 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
         {/* Lightbox */}
         {lightboxOpen && (
           <div
-            className={`fixed inset-0 bg-white backdrop-blur z-50 flex items-center justify-center transition-all duration-500 ease-in-out ${
-              lightboxVisible ? 'bg-opacity-80 opacity-100' : 'bg-opacity-0 opacity-0'
-            }`}
+            className={`fixed inset-0 bg-white backdrop-blur z-50 flex items-center justify-center transition-all duration-500 ease-in-out ${lightboxVisible ? 'bg-opacity-80 opacity-100' : 'bg-opacity-0 opacity-0'
+              }`}
             onClick={() => {
               setLightboxVisible(false);
               setTimeout(() => setLightboxOpen(false), 500);
@@ -313,26 +353,25 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
               ×
             </button>
             <button
-              onClick={(e) => {e.stopPropagation(); prevLightboxImage();}}
+              onClick={(e) => { e.stopPropagation(); prevLightboxImage(); }}
               className="fixed left-8 top-1/2 transform -translate-y-1/2 text-black text-4xl hover:text-gray-700 z-50 bg-white bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
             >
               ←
             </button>
             <button
-              onClick={(e) => {e.stopPropagation(); nextLightboxImage();}}
+              onClick={(e) => { e.stopPropagation(); nextLightboxImage(); }}
               className="fixed right-8 top-1/2 transform -translate-y-1/2 text-black text-4xl hover:text-gray-700 z-50 bg-white bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
             >
               →
             </button>
 
-            <div className={`relative flex items-center justify-center transform transition-all duration-500 ease-in-out ${
-              lightboxVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-            }`} style={{ width: '90vw', height: '90vh' }}>
-      <img
-        src={images[lightboxIndex]}
-        alt="Car"
-        className="max-w-[90vw] max-h-[90vh] object-contain"
-      />
+            <div className={`relative flex items-center justify-center transform transition-all duration-500 ease-in-out ${lightboxVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+              }`} style={{ width: '90vw', height: '90vh' }}>
+              <img
+                src={images[lightboxIndex]}
+                alt="Car"
+                className="max-w-[90vw] max-h-[90vh] object-contain"
+              />
               <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-black text-sm bg-white bg-opacity-90 px-3 py-1 rounded shadow-lg z-50">
                 {lightboxIndex + 1} / {images.length}
               </div>
@@ -366,17 +405,17 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
           <div className="w-[90%] md:w-4/5 mx-auto">
             <h2 className="text-2xl font-semibold mb-5 font-jost">Základné údaje</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
-            {basicData.map((item, index) => (
-              <div key={index} className="flex items-center">
-                <div className="flex-shrink-0 mr-3">
-                  <img src={item.icon} alt={item.label} className="w-10 h-10" />
+              {basicData.map((item, index) => (
+                <div key={index} className="flex items-center">
+                  <div className="flex-shrink-0 mr-3">
+                    <img src={item.icon} alt={item.label} className="w-10 h-10" />
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="text-lg mb-0 leading-tight font-montserrat">{item.label}</div>
+                    <div className="text-base font-bold font-montserrat">{item.value}</div>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <div className="text-lg mb-0 leading-tight font-montserrat">{item.label}</div>
-                  <div className="text-base font-bold font-montserrat">{item.value}</div>
-                </div>
-              </div>
-            ))}
+              ))}
             </div>
           </div>
         )}

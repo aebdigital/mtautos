@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MiniHero from '../components/MiniHero';
 
 const VykupPage: React.FC = () => {
@@ -43,7 +44,14 @@ const VykupPage: React.FC = () => {
     ];
 
     return (
-        <>
+        <div className="min-h-screen bg-white font-montserrat">
+            <Helmet>
+                <title>Výkup vozidiel - peniaze ihneď | MT AUTOS</title>
+                <meta
+                    name="description"
+                    content="Vykúpime vaše auto za najlepšiu cenu. Peniaze ihneď na ruku alebo na účet. Preberáme záruku za technický stav. Rýchle a férové jednanie."
+                />
+            </Helmet>
             <MiniHero title="VÝKUP VOZIDIEL" />
 
             {/* Intro */}
@@ -129,7 +137,7 @@ const VykupPage: React.FC = () => {
                     </Link>
                 </div>
             </section>
-        </>
+        </div>
     );
 };
 

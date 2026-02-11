@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
 import CarCard from '../components/CarCard';
@@ -33,6 +34,7 @@ const HomePage: React.FC<HomePageProps> = ({ cars, isLoading, onCarClick, announ
       setShowAnnouncement(true);
     }
   }, [announcements]);
+
   // Filter cars marked for homepage display, or fallback to latest 4 cars
   const homepageCars = cars.filter(car => car.showOnHomepage === true);
   const displayCars = homepageCars.length > 0 ? homepageCars.slice(0, 4) : cars.slice(0, 4);
@@ -51,7 +53,16 @@ const HomePage: React.FC<HomePageProps> = ({ cars, isLoading, onCarClick, announ
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>MT AUTOS - Autobazár Sučany pri Martine | Predaj, Dovoz, Leasing, Výkup</title>
+        <meta
+          name="description"
+          content="Váš spoľahlivý autobazár v Sučanoch. Kompletná ponuka vozidiel, dovoz áut na objednávku, výhodný leasing a výkup. Navštívte nás v Sučanoch pri Martine."
+        />
+        <link rel="canonical" href="https://www.mtautos.sk/" />
+      </Helmet>
+
       <Hero />
 
       <section className="py-16">
@@ -209,7 +220,7 @@ const HomePage: React.FC<HomePageProps> = ({ cars, isLoading, onCarClick, announ
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
