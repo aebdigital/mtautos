@@ -38,6 +38,13 @@ const PonukaPage: React.FC<PonukaPageProps> = ({ cars, isLoading }) => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <Helmet>
+        <title>Ponuka vozidiel | MT AUTOS Sučany</title>
+        <meta
+          name="description"
+          content="Aktuálna ponuka jazdených vozidiel v MT AUTOS. Široký výber áut, možnosť financovania a poistenia. Všetky vozidlá sú preverené."
+        />
+      </Helmet>
       <MiniHero title="PONUKA" />
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
