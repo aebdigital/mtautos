@@ -64,19 +64,30 @@ const LeasingPage: React.FC = () => {
             {/* Advantages Grid */}
             <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                        {advantages.map((item, index) => (
-                            <div
-                                key={index}
-                                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
-                            >
-                                <div className="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center text-green-600 mb-5">
-                                    {item.icon}
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-6xl mx-auto items-stretch">
+                        {/* Left: Cards */}
+                        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {advantages.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+                                >
+                                    <div className="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center text-green-600 mb-5">
+                                        {item.icon}
+                                    </div>
+                                    <h3 className="text-xl font-bold font-jost mb-3">{item.title}</h3>
+                                    <p className="text-gray-600 font-montserrat leading-relaxed">{item.description}</p>
                                 </div>
-                                <h3 className="text-xl font-bold font-jost mb-3">{item.title}</h3>
-                                <p className="text-gray-600 font-montserrat leading-relaxed">{item.description}</p>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                        {/* Right: Image */}
+                        <div className="lg:col-span-2 h-full">
+                            <img
+                                src="/leasing.jpg"
+                                alt="Leasing & Autoúver"
+                                className="w-full h-full object-cover rounded-2xl shadow-lg"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -87,8 +98,8 @@ const LeasingPage: React.FC = () => {
                     <div className="max-w-4xl mx-auto">
                         <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-10 md:p-14 text-white text-center">
                             <h2 className="text-3xl md:text-4xl font-bold font-jost mb-6">Náš financovací partner</h2>
-                            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-10 py-6 mb-6">
-                                <span className="text-4xl md:text-5xl font-bold font-jost tracking-wider">HomeCredit</span>
+                            <div className="inline-block bg-white rounded-2xl px-10 py-6 mb-6">
+                                <img src="/homecredit.jpg" alt="HomeCredit" className="h-14 w-auto object-contain" />
                             </div>
                             <p className="text-lg font-montserrat opacity-90 max-w-2xl mx-auto">
                                 Spoľahlivý partner pre autoúvery a spotrebné úvery. Rýchle schválenie, férové podmienky

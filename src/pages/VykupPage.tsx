@@ -51,10 +51,10 @@ const VykupPage: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="max-w-4xl mx-auto text-center">
                         <h2 className="text-4xl md:text-5xl font-bold font-jost mb-6">
-                            Výkup vozidiel v hotovosti – <span className="text-red-500">platba ihneď</span>
+                            Výkup vozidiel – <span className="text-red-500">platba ihneď</span>
                         </h2>
                         <p className="text-lg md:text-xl text-gray-600 font-montserrat leading-relaxed">
-                            Vykúpime vaše vozidlo rýchlo, férovo a za hotovosť. Nemusíte sa starať o prepis,
+                            Vykúpime vaše vozidlo rýchlo a férovo. Nemusíte sa starať o prepis,
                             poistenie ani žiadne iné formality – všetko vybavíme za vás.
                         </p>
                     </div>
@@ -64,19 +64,30 @@ const VykupPage: React.FC = () => {
             {/* Benefits */}
             <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                        {benefits.map((item, index) => (
-                            <div
-                                key={index}
-                                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
-                            >
-                                <div className="w-14 h-14 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 mb-5">
-                                    {item.icon}
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-6xl mx-auto items-stretch">
+                        {/* Left: Cards */}
+                        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {benefits.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+                                >
+                                    <div className="w-14 h-14 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 mb-5">
+                                        {item.icon}
+                                    </div>
+                                    <h3 className="text-xl font-bold font-jost mb-3">{item.title}</h3>
+                                    <p className="text-gray-600 font-montserrat leading-relaxed">{item.description}</p>
                                 </div>
-                                <h3 className="text-xl font-bold font-jost mb-3">{item.title}</h3>
-                                <p className="text-gray-600 font-montserrat leading-relaxed">{item.description}</p>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                        {/* Right: Image */}
+                        <div className="lg:col-span-2 h-full">
+                            <img
+                                src="/vykup.webp"
+                                alt="Výkup vozidiel"
+                                className="w-full h-full object-cover rounded-2xl shadow-lg"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>

@@ -24,8 +24,8 @@ const Services: React.FC = () => {
       link: '/vykup',
     },
     {
-      title: 'PZP',
-      image: '/leasing.jpg',
+      title: 'Poistenie',
+      image: '/pzp.jpg',
       link: '/pzp',
     },
   ];

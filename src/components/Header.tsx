@@ -26,7 +26,7 @@ const Header: React.FC = () => {
           <Link to="/dovoz" className="text-black font-bold font-jost hover:text-gray-600 flex items-center px-4">Dovoz</Link>
           <Link to="/leasing" className="text-black font-bold font-jost hover:text-gray-600 flex items-center px-4">Leasing</Link>
           <Link to="/vykup" className="text-black font-bold font-jost hover:text-gray-600 flex items-center px-4">Výkup</Link>
-          <Link to="/pzp" className="text-black font-bold font-jost hover:text-gray-600 flex items-center px-4">PZP</Link>
+          <Link to="/pzp" className="text-black font-bold font-jost hover:text-gray-600 flex items-center px-4">Poistenie</Link>
           <Link to="/kontakt" className="text-black font-bold font-jost hover:text-gray-600 flex items-center px-4 h-full">Kontakt</Link>
         </nav>
 
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
           <Link to="/dovoz" className="text-black font-bold font-jost hover:text-gray-600 text-5xl" onClick={toggleMenu}>Dovoz</Link>
           <Link to="/leasing" className="text-black font-bold font-jost hover:text-gray-600 text-5xl" onClick={toggleMenu}>Leasing</Link>
           <Link to="/vykup" className="text-black font-bold font-jost hover:text-gray-600 text-5xl" onClick={toggleMenu}>Výkup</Link>
-          <Link to="/pzp" className="text-black font-bold font-jost hover:text-gray-600 text-5xl" onClick={toggleMenu}>PZP</Link>
+          <Link to="/pzp" className="text-black font-bold font-jost hover:text-gray-600 text-5xl" onClick={toggleMenu}>Poistenie</Link>
           <Link to="/kontakt" className="text-black font-bold font-jost hover:text-gray-600 text-5xl" onClick={toggleMenu}>Kontakt</Link>
         </nav>
       </div>
