@@ -8,8 +8,14 @@ const siteId = process.env.REACT_APP_SITE_ID;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 exports.handler = async (event, context) => {
+    console.log('Sitemap generation started');
+    console.log('Supabase URL present:', !!process.env.REACT_APP_SUPABASE_URL);
+    console.log('Supabase Key present:', !!process.env.REACT_APP_SUPABASE_ANON_KEY);
+    console.log('Site ID:', siteId);
+
     try {
         // 1. Fetch all active cars from Supabase
+        console.log('Fetching cars from Supabase...');
         const { data: cars, error } = await supabase
             .from('cars')
             .select('id, brand, model, year, updated_at, created_at')
@@ -17,7 +23,12 @@ exports.handler = async (event, context) => {
             .is('deleted_at', null)
             .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase error:', error);
+            throw error;
+        }
+
+        console.log(`Fetched ${cars?.length || 0} cars`);
 
         // 2. Define static routes
         const staticRoutes = [
