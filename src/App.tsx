@@ -3,10 +3,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AnnouncementPopup from './components/AnnouncementPopup';
+import PromoPopups from './components/PromoPopups';
 import HomePage from './pages/HomePage';
 import PonukaPage from './pages/PonukaPage';
 import CarDetailPage from './pages/CarDetailPage';
 import KontaktPage from './pages/KontaktPage';
+import DovozPage from './pages/DovozPage';
+import LeasingPage from './pages/LeasingPage';
+import VykupPage from './pages/VykupPage';
+import PZPPage from './pages/PZPPage';
 import { Car } from './types/car';
 import { getCarsForPonuka, PublicCar } from './lib/publicCars';
 
@@ -96,11 +101,28 @@ function AppContent() {
           path="/kontakt"
           element={<KontaktPage />}
         />
+        <Route
+          path="/dovoz"
+          element={<DovozPage />}
+        />
+        <Route
+          path="/leasing"
+          element={<LeasingPage />}
+        />
+        <Route
+          path="/vykup"
+          element={<VykupPage />}
+        />
+        <Route
+          path="/pzp"
+          element={<PZPPage />}
+        />
       </Routes>
 
       <Footer />
 
       <AnnouncementPopup />
+      <PromoPopups />
     </div>
   );
 }
