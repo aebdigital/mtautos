@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MiniHero from '../components/MiniHero';
-import PrivacyModal from '../components/PrivacyModal';
 import { getActivePhonesForSite } from '../lib/publicContact';
 
 declare global {
@@ -35,7 +35,6 @@ interface FormStatus {
 }
 
 const KontaktPage: React.FC = () => {
-  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [phones, setPhones] = useState<string[]>([]);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -389,22 +388,18 @@ const KontaktPage: React.FC = () => {
 
               <p className="text-xs text-gray-500 mt-4 font-montserrat">
                 Odoslaním súhlasíte pohltom spracovaniu v{' '}
-                <button
-                  onClick={() => setIsPrivacyModalOpen(true)}
-                  className="text-blue-600 underline bg-transparent border-none cursor-pointer"
+                <Link
+                  to="/ochrana-osobnych-udajov"
+                  className="text-blue-600 underline"
                 >
                   ochrane osobných údajov
-                </button>
+                </Link>
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <PrivacyModal
-        isOpen={isPrivacyModalOpen}
-        onClose={() => setIsPrivacyModalOpen(false)}
-      />
     </div>
   );
 };

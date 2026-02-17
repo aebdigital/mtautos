@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import AnnouncementPopup from './components/AnnouncementPopup';
 import PromoPopups from './components/PromoPopups';
+
 import HomePage from './pages/HomePage';
 import PonukaPage from './pages/PonukaPage';
 import CarDetailPage from './pages/CarDetailPage';
@@ -14,6 +15,8 @@ import DovozPage from './pages/DovozPage';
 import LeasingPage from './pages/LeasingPage';
 import VykupPage from './pages/VykupPage';
 import PZPPage from './pages/PZPPage';
+import OchranaOsobnychUdajovPage from './pages/OchranaOsobnychUdajovPage';
+import CookieConsent from './components/CookieConsent';
 import { Car } from './types/car';
 import { getCarsForPonuka, PublicCar } from './lib/publicCars';
 
@@ -119,12 +122,17 @@ function AppContent() {
           path="/pzp"
           element={<PZPPage />}
         />
+        <Route
+          path="/ochrana-osobnych-udajov"
+          element={<OchranaOsobnychUdajovPage />}
+        />
       </Routes>
 
       <Footer />
 
       <AnnouncementPopup />
       <PromoPopups />
+      <CookieConsent />
     </div>
   );
 }
@@ -135,6 +143,7 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
+
         <AppContent />
       </Router>
     </HelmetProvider>

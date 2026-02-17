@@ -23,6 +23,24 @@ const PZPPage: React.FC = () => {
             color: 'from-green-500 to-green-700',
             logo: '/kooperativa copy.jpg',
         },
+        {
+            name: 'ČSOB',
+            description: 'Silná finančná skupina s komplexnými poistnými riešeniami a individuálnym prístupom ku klientom.',
+            color: 'from-sky-500 to-sky-700',
+            logo: '/CSOB_logo.jpg',
+        },
+        {
+            name: 'Komunálna poisťovňa',
+            description: 'Spoľahlivá slovenská poisťovňa s tradíciou a dostupnými cenami poistenia pre každého.',
+            color: 'from-orange-500 to-orange-700',
+            logo: '/komunalna-poistovna-removebg-preview.png',
+        },
+        {
+            name: 'Uniqa',
+            description: 'Medzinárodná poisťovňa so silným zázemím a modernými poistnými produktmi na mieru.',
+            color: 'from-indigo-500 to-indigo-700',
+            logo: '/uniqua.svg',
+        },
     ];
 
     const coverageTypes = [

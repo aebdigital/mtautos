@@ -39,6 +39,7 @@ exports.handler = async (event, context) => {
             '/vykup',
             '/pzp',
             '/kontakt',
+            '/ochrana-osobnych-udajov',
         ];
 
         const baseUrl = 'https://www.mtautos.sk';

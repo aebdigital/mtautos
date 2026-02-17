@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import PrivacyModal from './PrivacyModal';
+import React, { useEffect, useState } from 'react';
 import { getActivePhonesForSite } from '../lib/publicContact';
 
 const Footer: React.FC = () => {
-  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [phones, setPhones] = useState<string[]>([]);
 
   useEffect(() => {
@@ -41,12 +39,13 @@ const Footer: React.FC = () => {
               <li><a href="/vykup" className="hover:text-gray-300">Výkup</a></li>
               <li><a href="/pzp" className="hover:text-gray-300">Poistenie</a></li>
               <li><a href="/kontakt" className="hover:text-gray-300">Kontakt</a></li>
+              <li><a href="/ochrana-osobnych-udajov" className="hover:text-gray-300">Ochrana osobných údajov</a></li>
               <li>
                 <button
-                  onClick={() => setIsPrivacyModalOpen(true)}
-                  className="hover:text-gray-300 bg-transparent border-none cursor-pointer text-white text-left"
+                  onClick={() => (window as any).__openCookieSettings?.()}
+                  className="hover:text-gray-300 bg-transparent border-none cursor-pointer text-white text-left font-montserrat p-0"
                 >
-                  Ochrana osobných údajov
+                  Cookies
                 </button>
               </li>
             </ul>
@@ -106,11 +105,6 @@ const Footer: React.FC = () => {
           <p>Copyright © 2025 MT AUTOS s.r.o. All Right Reserved</p>
         </div>
       </div>
-
-      <PrivacyModal
-        isOpen={isPrivacyModalOpen}
-        onClose={() => setIsPrivacyModalOpen(false)}
-      />
     </footer>
   );
 };
