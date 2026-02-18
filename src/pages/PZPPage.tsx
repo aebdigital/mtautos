@@ -41,6 +41,12 @@ const PZPPage: React.FC = () => {
             color: 'from-indigo-500 to-indigo-700',
             logo: '/uniqua.svg',
         },
+        {
+            name: 'Wüstenrot',
+            description: 'Tradičná poisťovňa s dlhoročnými skúsenosťami a stabilným zázemím pre spoľahlivé poistenie vozidiel.',
+            color: 'from-red-600 to-red-800',
+            logo: '/wustenrot.png',
+        },
     ];
 
     const coverageTypes = [
