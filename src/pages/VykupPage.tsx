@@ -110,7 +110,7 @@ const VykupPage: React.FC = () => {
                         {[
                             { step: '01', title: 'Kontaktujte nás', desc: 'Zavolajte nám alebo napíšte s informáciami o vašom vozidle.' },
                             { step: '02', title: 'Ocenenie vozidla', desc: 'Férovo oceníme vaše vozidlo podľa aktuálneho stavu a trhovej hodnoty.' },
-                            { step: '03', title: 'Okamžitá platba', desc: 'Po dohode vám vyplatíme dohodnutú čiastku okamžite v hotovosti.' },
+                            { step: '03', title: 'Okamžitá platba', desc: 'Po dohode vám vyplatíme dohodnutú čiastku okamžite.' },
                         ].map((item, index) => (
                             <div key={index} className="text-center">
                                 <div className="text-6xl font-bold font-jost text-red-500/20 mb-4">{item.step}</div>
