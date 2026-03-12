@@ -156,6 +156,7 @@ export interface PublicCarFull extends PublicCarDetail {
   galleryImageUrls: string[];
   // New fields
   doors?: string | null;
+  seats?: number | null;
   color?: string | null;
   reserved?: boolean | null;
   month?: number | null;
@@ -219,6 +220,7 @@ export async function getCarFullById(carId: string): Promise<PublicCarFull | nul
     galleryImageUrls,
     // New fields
     doors: data.doors,
+    seats: data.seats,
     color: data.color,
     reserved: data.reserved,
     month: data.month,

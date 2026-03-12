@@ -18,6 +18,7 @@ import karoseriaIcon from '../images/karoseria.svg';
 import vinIcon from '../images/VIN.svg';
 import dvereIcon from '../images/dvere.svg';
 import farbaIcon from '../images/farba.svg';
+import seatsIcon from '../images/seats.svg';
 
 interface CarDetailPageProps {
   cars: Car[];
@@ -108,6 +109,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     'VIN': vinIcon,
     'Dvere': dvereIcon,
     'Farba': farbaIcon,
+    'Počet miest': seatsIcon,
   };
 
   // Helper to format transmission
@@ -129,6 +131,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
     { label: 'Rok výroby', value: car.month && car.year ? `${car.month}/${car.year}` : car.year?.toString(), icon: icons['Rok výroby'] },
     { label: 'Karoséria', value: car.bodyType, icon: icons['Karoséria'] },
     { label: 'Dvere', value: car.doors, icon: icons['Dvere'] },
+    { label: 'Počet miest', value: car.seats?.toString(), icon: icons['Počet miest'] },
     { label: 'Farba', value: car.color, icon: icons['Farba'] },
     { label: 'Platnosť STK/EK', value: car.stkValidity ? (() => { const d = new Date(car.stkValidity); return `${d.getMonth() + 1}/${d.getFullYear()}`; })() : null, icon: icons['Rok výroby'] },
     { label: 'VIN', value: car.vin, icon: icons['VIN'] },
