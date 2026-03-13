@@ -19,6 +19,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
   // Check if car is reserved (either by reserved boolean or reservation date in the future)
   const isReservedByDate = car.reservedUntil && new Date(car.reservedUntil) > new Date();
   const isReserved = car.reserved || isReservedByDate;
+  const isSold = car.sold;
 
   // Format reservation date
   const formatReservationDate = (dateStr: string) => {
@@ -50,16 +51,22 @@ const CarCard: React.FC<CarCardProps> = ({ car, onClick }) => {
         <div className="absolute top-0 right-0 bg-red-600 text-white px-4 py-2 rounded-bl text-lg font-bold font-jost">
           {car.price.toLocaleString()} €
         </div>
-        {isAdminAdded && (
-          <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat">
-            ADMIN
-          </div>
-        )}
-        {isReserved && (
-          <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat">
-            REZERVOVANÉ
-          </div>
-        )}
+        <div className="absolute top-2 left-2 flex flex-col gap-2">
+          {isAdminAdded && (
+            <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat">
+              ADMIN
+            </div>
+          )}
+          {isSold ? (
+            <div className="bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat uppercase">
+              PREDANÉ
+            </div>
+          ) : isReserved ? (
+            <div className="bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold font-montserrat uppercase">
+              REZERVOVANÉ
+            </div>
+          ) : null}
+        </div>
       </div>
       <div className="px-4 pt-4">
         <h3 className="text-lg font-bold text-gray-800 mb-2">

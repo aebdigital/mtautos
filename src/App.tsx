@@ -52,6 +52,7 @@ function AppContent() {
           vatDeductible: car.vatDeductible ?? false,
           priceWithoutVat: car.priceWithoutVat ?? undefined,
           reserved: car.reserved ?? false,
+          sold: car.sold ?? false,
         }));
 
         setSupabaseCars(cars);

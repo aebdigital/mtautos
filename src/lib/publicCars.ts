@@ -17,6 +17,7 @@ export interface PublicCar {
   vatDeductible?: boolean | null;
   priceWithoutVat?: number | null;
   reserved?: boolean | null;
+  sold?: boolean | null;
 }
 
 export interface PublicCarDetail extends PublicCar {
@@ -57,7 +58,8 @@ export async function getCarsForPonuka(): Promise<PublicCar[]> {
       show_on_homepage,
       vat_deductible,
       price_without_vat,
-      reserved
+      reserved,
+      sold
     `
     )
     .eq("site_id", SITE_ID)
@@ -84,6 +86,7 @@ export async function getCarsForPonuka(): Promise<PublicCar[]> {
     vatDeductible: car.vat_deductible,
     priceWithoutVat: car.price_without_vat,
     reserved: car.reserved,
+    sold: car.sold,
   }));
 }
 
@@ -111,7 +114,8 @@ export async function getCarById(carId: string): Promise<PublicCarDetail | null>
       vin,
       description,
       reserved_until,
-      show_on_homepage
+      show_on_homepage,
+      sold
     `
     )
     .eq("id", carId)
@@ -147,6 +151,7 @@ export async function getCarById(carId: string): Promise<PublicCarDetail | null>
     description: data.description,
     reservedUntil: data.reserved_until,
     showOnHomepage: data.show_on_homepage,
+    sold: data.sold,
   };
 }
 
@@ -159,6 +164,7 @@ export interface PublicCarFull extends PublicCarDetail {
   seats?: number | null;
   color?: string | null;
   reserved?: boolean | null;
+  sold?: boolean | null;
   month?: number | null;
   vatDeductible?: boolean | null;
   priceWithoutVat?: number | null;
@@ -216,6 +222,7 @@ export async function getCarFullById(carId: string): Promise<PublicCarFull | nul
     description: data.description,
     reservedUntil: data.reserved_until,
     showOnHomepage: data.show_on_homepage,
+    sold: data.sold,
     mainImageUrl,
     galleryImageUrls,
     // New fields

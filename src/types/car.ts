@@ -22,4 +22,5 @@ export interface Car {
   vatDeductible?: boolean; // Flag for VAT deductible
   priceWithoutVat?: number; // Price without VAT
   reserved?: boolean; // Flag for reserved status
+  sold?: boolean; // Flag for sold status
 }

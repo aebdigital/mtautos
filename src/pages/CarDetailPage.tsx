@@ -209,7 +209,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
                 "url": window.location.href,
                 "priceCurrency": "EUR",
                 "price": car.price,
-                "availability": car.reserved ? "https://schema.org/Reserved" : "https://schema.org/InStock",
+                "availability": car.sold ? "https://schema.org/OutOfStock" : car.reserved ? "https://schema.org/Reserved" : "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/UsedCondition"
               }
             })}
@@ -390,11 +390,15 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
           </p>
           <div className="text-3xl text-red-600 font-bold font-montserrat">{car.price?.toLocaleString()} €</div>
           <div className="flex flex-wrap gap-2 mt-2">
-            {car.reserved && (
+            {car.sold ? (
+              <div className="inline-block bg-red-600 text-white px-4 py-2 text-sm font-bold font-montserrat rounded">
+                PREDANÉ
+              </div>
+            ) : car.reserved ? (
               <div className="inline-block bg-black text-white px-4 py-2 text-sm font-bold font-montserrat rounded">
                 REZERVOVANÉ
               </div>
-            )}
+            ) : null}
             {car.vatDeductible && car.priceWithoutVat && (
               <div className="inline-block bg-black text-white px-4 py-2 text-sm font-bold font-montserrat rounded">
                 Odpočet DPH: {car.priceWithoutVat.toLocaleString()} €
@@ -532,7 +536,7 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ cars }) => {
         )}
 
         {/* Reserved Until Notice */}
-        {car.reservedUntil && new Date(car.reservedUntil) > new Date() && (
+        {car.reservedUntil && new Date(car.reservedUntil) > new Date() && !car.sold && (
           <div className="w-[90%] md:w-4/5 mx-auto mb-10">
             <div className="bg-orange-100 border border-orange-300 text-orange-800 px-4 py-3 rounded-lg font-montserrat">
               <strong>Rezervované</strong> do {new Date(car.reservedUntil).toLocaleDateString('sk-SK')}
