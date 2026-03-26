@@ -291,7 +291,7 @@ const KontaktPage: React.FC = () => {
             {/* Form */}
             <div className="p-6 bg-white">
               <p className="text-sm text-gray-600 mb-6 font-montserrat">
-                Vyplňte potrebné údaje a ozveme sa Vám na najskôr
+                Vyplňte potrebné údaje a ozveme sa Vám čo najskôr
               </p>
 
               {formStatus.type !== 'idle' && (
