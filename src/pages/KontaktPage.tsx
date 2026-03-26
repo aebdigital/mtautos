@@ -250,13 +250,13 @@ const KontaktPage: React.FC = () => {
 
               <div>
                 <p className="text-gray-700">
-                  <span className="font-semibold">IČO:</span> 47384017
+                  <span className="font-semibold">IČO:</span> 47584017
                 </p>
                 <p className="text-gray-700">
-                  <span className="font-semibold">DIČ:</span> 2023892652
+                  <span className="font-semibold">DIČ:</span> 2023992652
                 </p>
                 <p className="text-gray-700">
-                  <span className="font-semibold">IČ DPH:</span> SK2023892652
+                  <span className="font-semibold">IČ DPH:</span> SK2023992652
                 </p>
               </div>
 
@@ -291,7 +291,7 @@ const KontaktPage: React.FC = () => {
             {/* Form */}
             <div className="p-6 bg-white">
               <p className="text-sm text-gray-600 mb-6 font-montserrat">
-                Vyplňte potrebné údaje a zašleme sa Vám na najskôr
+                Vyplňte potrebné údaje a ozveme sa Vám na najskôr
               </p>
 
               {formStatus.type !== 'idle' && (
